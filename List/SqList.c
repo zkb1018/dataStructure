@@ -29,6 +29,32 @@ int InitList(SqList* L){
 
 //置为空表
 
+void GetElem(SqList L,int i,ElemType *e){
+	if(i<1||i>L.length+1) return;
+	*e=L.elem[i-1];
+}
+
+int LocateElem(SqList L,ElemType e){
+	for(int i=0;i<L.length;i++){
+		if(L.elem[i]==e)
+			return i;
+	}
+	return -1;
+}
+
+void PriorElem(SqList L,ElemType cur_e,ElemType *pre_e){
+	int index=LocateElem(L,cur_e);
+	if(index==-1||index==0) *pre_e=NULL;
+	else{
+		*pre_e=L.elem[index-1];
+	}
+}
+
+void NextElem(SqList L,ElemType cur_e,ElemType *next_e){
+	int index=LocateElem(L,cur_e);
+	if(index==-1||index==L.length-1) *next_e=NULL;
+	else *next_e=L.elem[index+1];
+}
 //是否为空
 int ListEmpty(SqList L){
 	if(L.length==0)
@@ -64,6 +90,21 @@ void ListInsert(SqList *L,int i,ElemType e){
 	++L->length;
 
 }
+
+void ListDelete(SqList *L,int i,ElemType *e){
+	if(i<1||i>L->length+1) return;
+	*e=L->elem[i-1];
+	for(int j=i-1;j<L->length;j++){
+		L->elem[j]=L->elem[j+1];
+	}
+	//free(&L->elem[L->length-1]);
+	L->length--;
+	if(L->listSize>LIST_INIT_SIZE){
+		L->listSize-=LISTINCREMENT;
+	}
+	
+	
+} 
 int main(){
 	SqList L;
 	int tmp=InitList(&L);
@@ -72,10 +113,26 @@ int main(){
 	ListInsert(&L,1,6);
 	ListInsert(&L,1,4);
 	ListInsert(&L,1,11);
-	printf("创建空表：%d\n",tmp);
-	printf("是否空表：%d\n",ListEmpty(L));
+	int delKey;
+	//ListDelete(&L,3,&delKey);
+	GetElem(L,1,&delKey);
+	printf("initList:%d\n",tmp);
+	printf("is empty list:%d\n",ListEmpty(L));
+	printf("list:");
 	toString(L);
+	printf("*********************\n");
 	ListLength(L);
+	printf("*********************\n");
+	printf("get located:%d\n",LocateElem(L,21));
+	printf("%d\n",delKey);
+	printf("*********************\n");
+	int pre;
+	PriorElem(L,11,&pre);
+	printf("priorElem:%d\n",pre);
+	printf("*********************\n");
+	int next;
+	NextElem(L,11,&next);
+	printf("nextelem:%d\n",next);
 	return 1;
 
 }
