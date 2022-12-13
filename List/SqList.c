@@ -44,7 +44,7 @@ int LocateElem(SqList L,ElemType e){
 
 void PriorElem(SqList L,ElemType cur_e,ElemType *pre_e){
 	int index=LocateElem(L,cur_e);
-	if(index==-1||index==0) *pre_e=NULL;
+	if(index==-1||index==0) return;
 	else{
 		*pre_e=L.elem[index-1];
 	}
@@ -52,7 +52,7 @@ void PriorElem(SqList L,ElemType cur_e,ElemType *pre_e){
 
 void NextElem(SqList L,ElemType cur_e,ElemType *next_e){
 	int index=LocateElem(L,cur_e);
-	if(index==-1||index==L.length-1) *next_e=NULL;
+	if(index==-1||index==L.length-1) return;
 	else *next_e=L.elem[index+1];
 }
 //是否为空
