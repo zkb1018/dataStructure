@@ -2,6 +2,7 @@
 	with head node
 */
 #include<stdio.h>
+#include<stdlib.h>
 typedef int ElemType;
 typedef struct LNode {
 	ElemType data;
@@ -34,6 +35,22 @@ LNode* InitList(){
 	L->next=NULL;
 	return L;
 }
+
+//create List use head inserting
+void CreateList_L(LinkList L,int n){
+	L=(LinkList)malloc(sizeof(LNode));
+	L->next=NULL;
+	printf("分别输入%d个数：\n",n);
+	for(int i=0;i<n;i++){
+		int tmp;
+		LNode* p=(LinkList)malloc(sizeof(LNode));
+		scanf("%d",&tmp);
+		p->data=tmp;
+		p->next=L->next;
+		L->next=p;
+	}
+}
+
 
 //get the node's point in position i 
 LNode* GetElem(LinkList L,int i){
@@ -89,5 +106,9 @@ int main(){
 	int del;
 	ListDelete(L,2,&del);
 	toString(L);
+	printf("\n******************\n");
+	LinkList L1;
+	//CreateList_L(L1,5);
+	//toString(L1);
 	return 0;
 }
