@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#define MAXSIZE 10
+#define MAXSIZE 3
 typedef int ElemType;
 typedef struct
 {
@@ -32,6 +32,7 @@ int LocateElem_SL(SLinkList S, ElemType e)
 
 void InitSpace_SL(SLinkList space)
 {
+	dataHead.cur = -1;
 	for (int i = 0; i < MAXSIZE - 1; ++i)
 	{
 		space[i].data = 0;
@@ -51,75 +52,88 @@ int Malloc_SL(SLinkList space)
 void Free_SL(SLinkList space, int k)
 {
 	space[k].cur = space[0].cur;
+	space[k].data = 0;
 	space[0].cur = k;
 }
-int InitSLinkList(SLinkList S)
+
+int GetElem(SLinkList S, int i)
 {
-	int tempBody = 0, body = 0;
-	int i = 0;
-	InitSpace_SL(S);
-	body = Malloc_SL(S);
-	// 建立首元结点
-	S[body].data = 1;
-	S[body].cur = 0;
-	// 声明一个变量，把它当指针使，指向链表的最后的一个结点，当前和首元结点重合
-	tempBody = body;
-	for (i = 2; i < 4; i++)
+	int p = dataHead.cur;
+	int j = 1;
+	if (i == 0)
+		return 0;
+	while (p != -1 && j < i)
 	{
-		int j = Malloc_SL(S); // 从备用链表中拿出空闲的分量
-		S[j].data = i;		  // 初始化新得到的空间结点
-		S[tempBody].cur = j;  // 将新得到的结点链接到数据链表的尾部
-		tempBody = j;		  // 将指向链表最后一个结点的指针后移
+		p = S[p].cur;
+		j++;
 	}
-	S[tempBody].cur = 0; // 新的链表最后一个结点的指针设置为0
-	return body;
+	if (j != i)
+	{ // 位置超过长度
+		return -1;
+	}
+	return p;
 }
 
 void SLinkListInsert(SLinkList S, int i, ElemType e)
 {
 
-	if (i > MAXSIZE)
+	if (i > MAXSIZE || i <= 0)
 	{
 		printf("未找到该位置！\n");
 		return;
 	}
-
-	if (dataHead.cur == -1)
+	int pre = GetElem(S, i - 1);
+	if (pre == -1)
 	{
-		int tmp = Malloc_SL(S);
-		dataHead.cur = tmp;
+		printf("该位置不存在\n");
+		return;
+	}
+	int tmp = Malloc_SL(S);
+	if (tmp == 0)
+	{
+		printf("空间不足\n");
+		return;
+	}
+	if (pre == 0)
+	{
+		S[tmp].cur = dataHead.cur;
 		S[tmp].data = e;
-		S[tmp].cur = -1;
+		dataHead.cur = tmp;
 	}
 	else
 	{
-		int k = 0;
-		int j = dataHead.cur;
-		while (j != -1)
-		{
-			k++;
-			j = S[j].cur;
-		}
-		if (k < i - 1)
-		{
-			printf("未找到该位置！\n");
-			return;
-		}
-		int tmp = Malloc_SL(S);
-		S[tmp].cur = S[k].cur;
+		S[tmp].cur = S[pre].cur;
 		S[tmp].data = e;
-		S[k].cur = tmp;
+		S[pre].cur = tmp;
+	}
+}
+
+void SLinkListDelete(SLinkList S, int i, ElemType *e)
+{
+	if (i > MAXSIZE || i <= 0)
+		return;
+	int index = GetElem(S, i);
+	int preIndex = GetElem(S, i - 1);
+	if (index != -1)
+	{
+		*e = S[index].data;
+		S[preIndex].cur = S[index].cur;
+		Free_SL(S, index);
 	}
 }
 int main()
 {
 	SLinkList S;
-	dataHead.cur = -1;
 	InitSpace_SL(S);
 	SLinkListInsert(S, 1, 3);
 	SLinkListInsert(S, 1, 33);
 	SLinkListInsert(S, 1, 31);
-
+	SLinkListInsert(S, 2, 2);
+	SLinkListInsert(S, 6, 31);
+	toString(S);
+	printf("\n*******************\n");
+	int del;
+	SLinkListDelete(S, 4, &del);
 	toString(S);
 	return 0;
 }
