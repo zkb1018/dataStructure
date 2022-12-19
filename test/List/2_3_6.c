@@ -19,7 +19,6 @@ typedef struct
 
 void InitLinkList(LinkList *L)
 {
-    L = (LinkList *)malloc(sizeof(LinkList));
     Link head = (Link)malloc(sizeof(Link));
     L->length = 0;
     head->next = NULL;
@@ -80,14 +79,15 @@ int MakeNode(Link *p, ElemType e)
  * @param {ElemType} e
  * @return {*}
  */
-int ListInsert_L(LinkList L, int i, ElemType e)
+int ListInsert_L(LinkList *L, int i, ElemType e)
 {
     Link h, s;
-    if (!LocatePos(L, i - 1, &h))
+    if (!LocatePos(*L, i - 1, &h))
         return 0;
     if (!MakeNode(&s, e))
         return 0;
     InsFirst(h, s);
+    L->length++;
     return 1;
 }
 void toString(LinkList L)
@@ -118,16 +118,16 @@ void addTestData(LinkList *L)
  * @param {ElemType} x
  * @return {*}
  */
-void DeleteByValue(LinkList L, ElemType x)
+void DeleteByValue(LinkList *L, ElemType x)
 {
-    Link q = L.head;
+    Link q = L->head;
     while (q->next)
     {
         if (q->next->data == x)
         {
             Link p = q->next;
             q->next = q->next->next;
-            L.length--;
+            L->length--;
             // free(q);
             continue;
         }
@@ -157,17 +157,70 @@ void ReverseToString(LinkList L)
     printf("\n");
 }
 
+/**
+ * @msg: 删除L中最小值的结点
+ * @param {LinkList} L
+ * @return {*}
+ */
+void DelMinNode(LinkList *L)
+{
+    Link q = L->head;
+    Link min = L->head->next;
+    Link pre = L->head;
+    while (q->next)
+    {
+        if (min->data > q->next->data)
+        {
+            min = q->next;
+            pre = q;
+        }
+        q = q->next;
+    }
+    L->length--;
+    pre->next = min->next;
+    // free(min);
+}
+
+/**
+ * @msg: 就地逆置 空间复杂度O(1)
+ * @param {LinkList} L
+ * @return {*}
+ */
+void ReverseList(LinkList *L)
+{
+    Link p, q;
+    p = L->head->next;
+    L->head->next = NULL;
+    while (p)
+    {
+        q = p;
+        p = p->next;
+        q->next = L->head->next;
+        L->head->next = q;
+    }
+}
+
+void SortList(LinkList L)
+{
+    for (int i = 0; i < L.length - 1; i++)
+    {
+    }
+}
 int main()
 {
     LinkList L;
     InitLinkList(&L);
     addTestData(&L);
     toString(L);
-    ListInsert_L(L, 2, 5);
-    ListInsert_L(L, 3, 4);
+    ListInsert_L(&L, 2, 5);
+    ListInsert_L(&L, 3, 4);
     toString(L);
-    DeleteByValue(L, 4);
+    DeleteByValue(&L, 4);
     toString(L);
     ReverseToString(L);
+    DelMinNode(&L);
+    toString(L);
+    ReverseList(&L);
+    toString(L);
     return 0;
 }
