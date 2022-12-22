@@ -128,7 +128,7 @@ void DeleteByValue(LinkList *L, ElemType x)
             Link p = q->next;
             q->next = q->next->next;
             L->length--;
-            // free(q);
+            // free(p);
             continue;
         }
         q = q->next;
@@ -200,10 +200,27 @@ void ReverseList(LinkList *L)
     }
 }
 
-void SortList(LinkList L)
+/**
+ * @msg: 插入排序从小到大
+ * @param {LinkList} *L
+ * @return {*}
+ */
+void SortList(LinkList *L)
 {
-    for (int i = 0; i < L.length - 1; i++)
+    Link p, q;
+    p = L->head->next;
+    L->head->next = NULL;
+    while (p)
     {
+        q = p;
+        p = p->next;
+        Link t = L->head;
+        while (t->next && q->data >= t->next->data)
+        {
+            t = t->next;
+        }
+        q->next = t->next;
+        t->next = q;
     }
 }
 int main()
@@ -220,7 +237,8 @@ int main()
     ReverseToString(L);
     DelMinNode(&L);
     toString(L);
-    ReverseList(&L);
+    // ReverseList(&L);
+    SortList(&L);
     toString(L);
     return 0;
 }

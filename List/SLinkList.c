@@ -22,8 +22,8 @@ void toString(SLinkList S)
 }
 int LocateElem_SL(SLinkList S, ElemType e)
 {
-	int i = S[0].cur;
-	while (i && S[i].data != e)
+	int i = dataHead.cur;
+	while (i != -1 && S[i].data != e)
 	{
 		i = S[i].cur;
 	}
