@@ -1,9 +1,5 @@
 /*
- * @Descripttion:
- * @Author: zkb
- * @Date: 2022-12-22 14:39:50
- * @LastEditors: zkb
- * @LastEditTime: 2022-12-22 15:47:30
+ *   带头节点
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,12 +13,12 @@ typedef struct LinkNode
 
 LinkNode *getTop(LiStack S)
 {
-    LinkNode *p = S;
-    while (p->next)
+    if (!S->next)
     {
-        p = p->next;
+        printf("栈空\n");
+        return NULL;
     }
-    return p;
+    return S->next;
 }
 LiStack InitStack()
 {
@@ -33,34 +29,20 @@ LiStack InitStack()
 
 void Push(LiStack S, ElemType x)
 {
-    LinkNode *p = getTop(S);
-    if (p == NULL)
-    {
-        LinkNode *q = (LinkNode *)malloc(sizeof(LinkNode));
-        q->next = NULL;
-        q->data = x;
-        S->next = q;
-    }
-    else
-    {
-        LinkNode *q = (LinkNode *)malloc(sizeof(LinkNode));
-        q->next = p->next;
-        q->data = x;
-        p->next = q;
-    }
+
+    LinkNode *q = (LinkNode *)malloc(sizeof(LinkNode));
+    q->next = S->next;
+    q->data = x;
+    S->next = q;
 }
 
 void Pop(LiStack S, ElemType *x)
 {
-    LinkNode *q = getTop(S);
+    LinkNode *q = S->next;
     if (q == NULL)
         return;
-    LinkNode *p = S;
-    while (p->next->next)
-    {
-        p = p->next;
-    }
-    p->next = NULL;
+    *x = q->data;
+    S->next = q->next;
     free(q);
 }
 
@@ -69,7 +51,7 @@ void toString(LiStack S)
     LinkNode *p = S;
     while (p->next)
     {
-        printf("->%d", p->next->data);
+        printf("|%4d|\n", p->next->data);
         p = p->next;
     }
     printf("\n");
