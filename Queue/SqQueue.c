@@ -1,9 +1,9 @@
 /*
- * @Descripttion:循环队列
+ * @Descripttion:循环队列  普通队列易发生上溢，使用循环队列提高资源利用率
  * @Author: zkb
  * @Date: 2022-12-28 14:19:25
  * @LastEditors: zkb
- * @LastEditTime: 2022-12-28 15:10:31
+ * @LastEditTime: 2022-12-29 09:27:54
  */
 #include <stdio.h>
 #include <stdlib.h>
