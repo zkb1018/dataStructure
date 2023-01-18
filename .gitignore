@@ -1,2 +1,4 @@
 .VScode
 *.exe
+*.dSYM
+*.o
