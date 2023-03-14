@@ -2,8 +2,8 @@
  * @Descripttion:链式队列
  * @Author: zkb
  * @Date: 2022-12-28 15:22:14
- * @LastEditors: zkb
- * @LastEditTime: 2022-12-29 14:49:13
+ * @LastEditors: KB
+ * @LastEditTime: 2023-02-27 14:24:48
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,6 +58,14 @@ void DeQueue(LinkQueue *Q, ElemType *x)
     }
     free(p);
 }
+void destroyQueue(LinkQueue *Q){
+    while(Q->front!=Q->rear){
+        LinkNode *p=Q->front;
+        Q->front=p->next;
+        free(p);
+    }
+    free(Q->rear);
+}
 int main()
 {
     LinkQueue Q;
@@ -67,5 +75,6 @@ int main()
     EnQueue(&Q, 3);
     int tmp;
     DeQueue(&Q, &tmp);
+    destroyQueue(&Q);
     return 0;
 }

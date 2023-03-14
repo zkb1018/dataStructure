@@ -1,4 +1,11 @@
 /*
+ * @Descripttion: 
+ * @Author: KB
+ * @Date: 2023-01-15 14:31:02
+ * @LastEditors: KB
+ * @LastEditTime: 2023-02-26 10:51:36
+ */
+/*
  *   带头节点
  */
 #include <stdio.h>
@@ -34,6 +41,7 @@ void Push(LiStack S, ElemType x)
     q->next = S->next;
     q->data = x;
     S->next = q;
+    free(q);
 }
 
 void Pop(LiStack S, ElemType *x)
